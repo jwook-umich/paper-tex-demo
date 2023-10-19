@@ -16,9 +16,18 @@ jobs:
         uses: xu-cheng/texlive-action@v2
         with:
           run: |
-            latexmk -pdf
+            latexmk -pdf main
+            mkdir -p build && cp main.pdf build/main.pdf
       - name: Archive build PDF
         uses: actions/upload-artifact@v3
         with:
-          name: main.pdf
-          path: main.pdf
+          name: "main.pdf"
+          path: "build/main.pdf"
+      - name: Deploy to GH Pages
+        uses: JamesIves/github-pages-deploy-action@3.6.2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          CLEAN: true
+          SINGLE_COMMIT: true
+          FOLDER: build
